@@ -30,8 +30,9 @@ If you find the need to increase the number of backend instances to improve perf
 4) Uncomment the relevant lines in the nginx configuration to configure load balancing for the additional backend instances.
 5) Save the changes to the nginx configuration file.
 6) Restart the nginx container to apply the configuration changes:
-        ```bash
-    docker-compose restart nginx
+        
+    ```bash
+        docker-compose restart nginx
 
 The load balancing settings will now distribute incoming traffic among the backend instances, optimizing performance.
 
