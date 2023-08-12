@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow mb-5">
-        <a class="navbar-brand" href="#">To Do App İşlemleri</a>
+        <a class="navbar-brand" href="#">Management İşlemleri</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <router-link class="nav-item" tag="li" to="/">

@@ -65,6 +65,23 @@
         </div>
       </div>
     </div>
+    <div class="row col-12 mt-3">
+      <div class="col-3">
+        <select v-model="selectedFilter" class="form-control">
+          <option value="">Filter By</option>
+          <option value="name">Name</option>
+          <option value="hostname">Host Name</option>
+          <option value="url">URL</option>
+        </select>
+      </div>
+      <div class="col-6 mb-2">
+        <input v-model="filterKeyword" type="text" class="form-control" placeholder="Filter keyword">
+      </div>
+      <div class="col-xl-3 col-lg-6 col-sm-12">
+        <button @click="applyFilter" class="btn btn-primary">Apply Filter</button>
+        <button @click="clearFilter" class="btn btn-secondary ml-2">Clear Filter</button>
+      </div>
+    </div>
     <table class="table table-bordered mt-5">
       <thead>
       <tr>
@@ -114,6 +131,8 @@ export default {
         hostname: null,
         url: null
       },
+      selectedFilter: "",
+      filterKeyword: "",
       upstream: {
         upstream: {
           "type": "roundrobin",
@@ -144,6 +163,18 @@ export default {
 
   },
   methods: {
+    applyFilter() {
+      axios.get(`/api/dashboard/?${this.selectedFilter}=${this.filterKeyword}`).then(r => {
+          this.routes = r.data
+        }).catch((r) => {
+        console.log("r",r)
+      } )
+    },
+    clearFilter() {
+      this.selectedFilter = "";
+      this.filterKeyword = "";
+      this.getAllRoutes();
+    },
     getAllRoutes(search_query = '') {
       if (search_query === '') {
         axios.get('/api/dashboard/').then(r => {
@@ -156,9 +187,6 @@ export default {
       }
 
     },
-    capitalizeFirstChar(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    },
     update(v) {
       $('#exampleModalCenter').modal('toggle')
       this.route = {...v}
@@ -166,7 +194,7 @@ export default {
     },
     updateRoute(s) {
       axios.put(`/api/dashboard/${s.id}/`, this.route).then(r => {
-         axios.patch(`/apisix/admin/routes/${r.data.id}`, {
+        axios.patch(`/apisix/admin/routes/${r.data.id}`, {
               ...this.upstream,
               "name": this.route.name,
               "host": this.route.hostname,
@@ -189,11 +217,12 @@ export default {
     },
     deleteRoute(s) {
       axios.delete(`/api/dashboard/${s.id}/`).then(r => {
-         axios.delete(`/apisix/admin/routes/${s.id}`,
+        axios.delete(`/apisix/admin/routes/${s.id}`,
             {
               headers: {...this.headers}
             }
         ).then(s => {
+          this.getAllRoutes()
           this.clearRoute()
         })
         Vue.notify({
@@ -202,7 +231,7 @@ export default {
           text: 'Başarıyla sildiniz!',
         });
       })
-      this.getAllRoutes()
+
     },
     saveRoute() {
       axios.post('/api/dashboard/', this.route).then(r => {
@@ -246,7 +275,5 @@ export default {
   cursor: pointer;
 }
 
-.line-through {
-  text-decoration: line-through;
-}
+
 </style>
