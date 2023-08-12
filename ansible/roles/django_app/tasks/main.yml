@@ -1,0 +1,28 @@
+---
+- name: Copy Django App Files
+  copy:
+    src: /path/to/your/local/app
+    dest: /app/
+  become: yes
+
+- name: Install Docker if not present
+  apt:
+    name: docker.io
+    state: present
+  become: yes
+
+- name: Build Docker Image
+  command: docker build -t my_django_app /app/
+  args:
+    chdir: /app/
+  become: yes
+
+- name: Run Docker Container
+  docker_container:
+    name: my_django_container
+    image: my_django_app
+    state: started
+    restart_policy: always
+    ports:
+      - "8000:8000"
+  become: yes

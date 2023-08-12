@@ -38,8 +38,20 @@ The load balancing settings will now distribute incoming traffic among the backe
 
 Feel free to adjust the number of backend instances and the configuration as needed based on your project's requirements.
 
+Deploy using Ansible
+
+7) Run the Ansible playbook to deploy your Django app
+   
+   ```bash 
+      ansible-playbook -i inventories/production.ini playbooks/deploy.yml
+
+This playbook will copy your Django app files to the target server, install Docker if not present, build a Docker image using the provided Dockerfile, and then run a Docker container with your Django app.
+
+Remember to replace placeholders like /path/to/your/local/app with the actual paths and configurations suitable for your environment. Also, ensure that your Dockerfile and other necessary files are located in the specified directories.
+
+Make sure you have proper SSH access to the target server and adjust your SSH configuration accordingly.
+
+
 For more detailed information on Docker, nginx, or specific configuration options, refer to their official documentation.
 
-Contact
-If you have questions, concerns, or feedback, please don't hesitate to contact with me by melihy4@gmail.com.
-
+Contact If you have questions, concerns, or feedback, please don't hesitate to contact with me by melihy4@gmail.com.

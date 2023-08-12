@@ -1,0 +1,7 @@
+---
+- name: Deploy Django App
+  hosts: production
+  gather_facts: true
+  become: true
+  roles:
+    - django_app
